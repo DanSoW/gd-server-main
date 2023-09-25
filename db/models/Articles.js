@@ -57,21 +57,25 @@ const Articles = (sequelize, DataTypes) => {
             allowNull: false
         },
         price: {
-            type: DataTypes.DECIMAL,
+            type: DataTypes.INTEGER,
             allowNull: false
         },
         price_without_discount: {
-            type: DataTypes.DECIMAL,
+            type: DataTypes.INTEGER,
             allowNull: false
         },
         discount: {
             type: DataTypes.FLOAT,
             allowNull: false
         },
-        in_stock: {
-            type: DataTypes.INTEGER,
+        is_defect: {
+            type: DataTypes.BOOLEAN,
             allowNull: false
         },
+        additional_features: {
+            type: DataTypes.TEXT,
+            allowNull: false
+        }
     });
 
     model.associate = (models) => {

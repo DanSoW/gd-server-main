@@ -9,8 +9,10 @@ import cookieParser from "cookie-parser";
 import webApiConfig from "./config/web.api.json" assert { type: "json" };
 import "./utils/array.js";
 import { AuthRouteBase } from './constants/routes/auth.js';
+import { UserRouteBase } from './constants/routes/user.js';
 import AuthRouter from './routers/auth-routers.js';
 import AdminRouter from './routers/admin-routers.js';
+import UserRouter from "./routers/user-routers.js";
 import errorMiddleware from './middlewares/error-middleware.js';
 import db from "./db/index.js";
 import { fileURLToPath } from 'url';
@@ -54,6 +56,7 @@ app.use(cors({
 // Связывание глобальных маршрутов с роутерами
 app.use(AuthRouteBase, AuthRouter);
 app.use(AdminRouteBase, AdminRouter);
+app.use(UserRouteBase, UserRouter);
 
 // Добавление промежуточного ПО для обработки ошибок
 app.use(errorMiddleware);

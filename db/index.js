@@ -19,6 +19,7 @@ import Roles from './models/Roles.js';
 import Articles from './models/Articles.js';
 import ArticlesImages from './models/ArticlesImages.js';
 import Doors from './models/Doors.js';
+import FilterInfo from './models/FilterInfo.js';
 import initRoles from './mock/roles/init-roles.js';
 
 // Глобальный объект для работы с Sequelize ORM
@@ -56,6 +57,7 @@ db.Roles = Roles(sequelize, Sequelize.DataTypes);
 db.Doors = Doors(sequelize, Sequelize.DataTypes);
 db.Articles = Articles(sequelize, Sequelize.DataTypes);
 db.ArticlesImages = ArticlesImages(sequelize, Sequelize.DataTypes);
+db.FilterInfo = FilterInfo(sequelize, Sequelize.DataTypes);
 
 // Установка взаимосвязей между моделями (таблицами базы данных)
 Object.keys(db).forEach(modelName => {
