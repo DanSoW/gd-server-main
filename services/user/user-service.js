@@ -21,13 +21,15 @@ class UserService {
                 filter_by_min_price,
                 filter_by_max_price,
                 all_sizes,
-                size780on2000,
+                size990on2090,
+                size980on2080,
+                size960on2060,
+                size990on2100,
                 size800on2030,
                 size860on2050,
-                size900on2050,
-                size960on2070,
-                size980on2080,
+                size960on2050,
                 size1050on2070,
+                size900on2060,
                 for_apartment,
                 for_home,
                 left_opening,
@@ -38,6 +40,44 @@ class UserService {
                 showcase_sample,
             } = data;
 
+            const sizes = [
+                {
+                    label: "990x2090",
+                    value: size990on2090
+                },
+                {
+                    label: "980x2080",
+                    value: size980on2080
+                },
+                {
+                    label: "960x2060",
+                    value: size960on2060
+                },
+                {
+                    label: "990x2100",
+                    value: size990on2100
+                },
+                {
+                    label: "800x2030",
+                    value: size800on2030
+                },
+                {
+                    label: "860x2050",
+                    value: size860on2050
+                },
+                {
+                    label: "960x2050",
+                    value: size960on2050
+                },
+                {
+                    label: "1050x2070",
+                    value: size1050on2070
+                },
+                {
+                    label: "900x2060",
+                    value: size900on2060
+                },
+            ];
             let sum = count + limit;
 
             let doors = await db.Doors.findAll({
@@ -81,53 +121,19 @@ class UserService {
             if (!all_sizes) {
                 const exps = [];
 
-                if (size1050on2070) {
-                    exps.push({
-                        width: 1050,
-                        height: 2070
-                    });
-                }
+                for (let i = 0; i < sizes.length; i++) {
+                    const item = sizes[i];
 
-                if (size980on2080) {
-                    exps.push({
-                        width: 980,
-                        height: 2080
-                    });
-                }
+                    if (item.value) {
+                        const values = item.label.split("x");
+                        const width = Number(values[0]);
+                        const height = Number(values[1]);
 
-                if (size960on2070) {
-                    exps.push({
-                        width: 960,
-                        height: 2070
-                    });
-                }
-
-                if (size900on2050) {
-                    exps.push({
-                        width: 900,
-                        height: 2050
-                    });
-                }
-
-                if (size860on2050) {
-                    exps.push({
-                        width: 860,
-                        height: 2050
-                    });
-                }
-
-                if (size800on2030) {
-                    exps.push({
-                        width: 800,
-                        height: 2030
-                    });
-                }
-
-                if (size780on2000) {
-                    exps.push({
-                        width: 780,
-                        height: 2000
-                    });
+                        exps.push({
+                            width: width,
+                            height: height
+                        });
+                    }
                 }
 
                 if (exps.length > 0) {
@@ -306,15 +312,18 @@ class UserService {
                 // 1 Этап: выявление минимальных значений в наборах данных в рамках всех артиклей
 
                 for (let i = 0; i < doors.length; i++) {
-                    let maxArticle = doors[i].dataValues.articles[0].dataValues.price;
-                    for (let j = 1; j < doors[i].dataValues.articles.length; j++) {
-                        if (maxArticle <= doors[i].dataValues.articles[j].dataValues.price) {
-                            maxArticle = doors[i].dataValues.articles[j].dataValues.price;
+                    const door = doors[i];
+                    if (door.dataValues.articles.length > 0) {
+                        let maxArticle = door.dataValues.articles[0].dataValues.price;
+                        for (let j = 1; j < door.dataValues.articles.length; j++) {
+                            if (maxArticle <= door.dataValues.articles[j].dataValues.price) {
+                                maxArticle = door.dataValues.articles[j].dataValues.price;
+                            }
                         }
-                    }
 
-                    // Получаем от каждой двери значения минимального артикля
-                    doors[i].dataValues.max_article = maxArticle;
+                        // Получаем от каждой двери значения минимального артикля
+                        doors[i].dataValues.max_article = maxArticle;
+                    }
                 }
 
                 // Таким образом, сейчас у нас есть минимальные значения цены в артиклях
@@ -357,6 +366,7 @@ class UserService {
                 count: (sum - count)
             };
         } catch (e) {
+            console.log(e);
             throw ApiError.BadRequest(e.message);
         }
     }
