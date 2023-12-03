@@ -147,5 +147,18 @@ router.post(
     adminController.doorCharacteristicImageDelete
 )
 
+const filterInfoUpload = upload.fields([{ name: 'image', maxCount: 1 }]);
+router.post(
+    AdminRoute.FILTER_INFO_ADD,
+    [
+        authMiddleware,
+        accessMiddleware(["admin"]),
+        filterInfoUpload,
+        authMiddleware,
+        check('users_id', 'Некорректный идентификатор пользователя').isInt({ min: 1 })
+    ],
+    adminController.filterInfoAdd
+)
+
 
 export default router;

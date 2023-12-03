@@ -10,6 +10,8 @@ import ApiError from '../../exceptions/api-error.js';
 import SuccessDto from '../../dtos/response/success-dto.js';
 import RefreshDto from '../../dtos/auth/refresh-dto.js';
 import RoleDto from '../../dtos/auth/role-dto.js';
+import mailService from '../mail/mail-service.js';
+import MailerForms from '../../constants/forms/mailer-forms.js';
 
 class UserService {
     async doorGetAll(data) {
@@ -35,6 +37,7 @@ class UserService {
                 outdated_model,
                 showcase_sample,
             } = data;
+
             let sum = count + limit;
 
             let doors = await db.Doors.findAll({
@@ -424,6 +427,106 @@ class UserService {
             return {
                 doors: doors.filter((item) => item.articles.length > 0).slice(count, sum),
                 count: (sum - count)
+            };
+        } catch (e) {
+            throw ApiError.BadRequest(e.message);
+        }
+    }
+
+    async mailerCommonSend(data) {
+        try {
+            const { name, email, phone } = data;
+
+            // Отправка уведомления администраторам системы
+            const admins = config.get("admin_list");
+            for (let i = 0; i < admins.length; i++) {
+                const adminEmail = admins[i].email;
+                await mailService.sendMail(
+                    adminEmail,
+                    "Отправка пользователем формы для обратной связи",
+                    MailerForms.commonToAdmin(name, email, phone)
+                );
+            }
+
+            // Отправка уведомления пользователю
+            await mailService.sendMail(
+                email,
+                "Успешная отправка формы обратной связи",
+                MailerForms.commonToUser(name)
+            );
+
+        } catch (e) {
+            throw ApiError.BadRequest(e.message);
+        }
+    }
+
+    async mailerOrderSend(data) {
+        try {
+            const { name, email, phone, door_title, article_title } = data;
+
+            // Отправка уведомления администраторам системы
+            const admins = config.get("admin_list");
+            for (let i = 0; i < admins.length; i++) {
+                const adminEmail = admins[i].email;
+                await mailService.sendMail(
+                    adminEmail,
+                    "Отправка пользователем формы для обратной связи",
+                    MailerForms.orderToAdmin(name, email, phone, door_title, article_title)
+                );
+            }
+
+            // Отправка уведомления пользователю
+            await mailService.sendMail(
+                email,
+                "Успешная отправка формы обратной связи",
+                MailerForms.orderToUser(name, door_title, article_title)
+            );
+
+        } catch (e) {
+            throw ApiError.BadRequest(e.message);
+        }
+    }
+
+    async mailerOrderSend(data) {
+        try {
+            const { name, email, phone, door_title, article_title } = data;
+
+            // Отправка уведомления администраторам системы
+            const admins = config.get("admin_list");
+            for (let i = 0; i < admins.length; i++) {
+                const adminEmail = admins[i].email;
+                await mailService.sendMail(
+                    adminEmail,
+                    "Отправка пользователем формы для обратной связи",
+                    MailerForms.orderToAdmin(name, email, phone, door_title, article_title)
+                );
+            }
+
+            // Отправка уведомления пользователю
+            await mailService.sendMail(
+                email,
+                "Успешная отправка формы обратной связи",
+                MailerForms.orderToUser(name, door_title, article_title)
+            );
+
+        } catch (e) {
+            throw ApiError.BadRequest(e.message);
+        }
+    }
+
+    async getFilterInfo(data) {
+        try {
+            const filterInfo = await db.FilterInfo.findOne();
+            if (!filterInfo) {
+                return {
+                    url: `${config.get("url.api")}/${config.get("filter_image.url")}`
+                }
+            }
+
+            const url = `${config.get("url.api")}/${filterInfo.filepath}`;
+
+            return {
+                url: url
             };
         } catch (e) {
             throw ApiError.BadRequest(e.message);

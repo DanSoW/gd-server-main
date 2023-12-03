@@ -103,8 +103,6 @@ class AdminService {
                 additional_features
             } = data;
 
-            console.log(data);
-
             const door = await db.Doors.findOne(({
                 where: {
                     id: doors_id
@@ -518,6 +516,37 @@ class AdminService {
 
             return articleImage;
         } catch (e) {
+            await t.rollback();
+            throw ApiError.BadRequest(e.message);
+        }
+    }
+
+    async filterInfoAdd(data, image) {
+        const t = await db.sequelize.transaction();
+
+        try {
+            const { users_id, title, description } = data;
+
+            const filterInfo = await db.FilterInfo.findOne();
+            if (filterInfo) {
+                await filterInfo.destroy({ transaction: t });
+            }
+
+            const createFilterInfo = await db.FilterInfo.create({
+                filepath: image.path,
+                filename: image.filename
+            });
+
+            await t.commit();
+
+            const url = `${config.get("url.api")}/${createFilterInfo.filepath}`;
+
+            return {
+                url: url
+            };
+        } catch (e) {
+            fs.unlinkSync(image.path);
+
             await t.rollback();
             throw ApiError.BadRequest(e.message);
         }

@@ -29,4 +29,27 @@ router.post(
     userController.doorGetByMinPrice
 );
 
+router.post(
+    UserRoute.MAILER_COMMON_SEND,
+    [
+        check('email', 'Некорректный email-адрес').isEmail(),
+        check('phone', 'Некорректный номер телефона').isMobilePhone("ru-RU")
+    ],
+    userController.mailerCommonSend
+);
+
+router.post(
+    UserRoute.MAILER_ORDER_SEND,
+    [
+        check('email', 'Некорректный email-адрес').isEmail(),
+        check('phone', 'Некорректный номер телефона').isMobilePhone("ru-RU")
+    ],
+    userController.mailerOrderSend
+);
+
+router.get(
+    UserRoute.FILTER_INFO,
+    userController.getFilterInfo
+);
+
 export default router;

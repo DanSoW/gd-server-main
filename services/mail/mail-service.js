@@ -53,6 +53,21 @@ class MailService {
                 `
         });
     }
+
+    /**
+     * Отправка общей формы
+     * @param {string} to Кому отправить письмо
+     * @param {string} link Ссылка для активации аккаунта
+     */
+    async sendMail(to, subject, html) {
+        await this.transporter.sendMail({
+            from: `Двери ГРАНИТ <${config.get('smtp.user')}>`,
+            to,
+            subject: subject,
+            text: '',
+            html: html
+        });
+    }
 }
 
 export default new MailService();

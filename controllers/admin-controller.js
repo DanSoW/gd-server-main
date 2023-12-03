@@ -184,6 +184,22 @@ class AdminController {
             next(e);
         }
     }
+
+    async filterInfoAdd(req, res, next) {
+        try {
+            const errors = validationResult(req);
+
+            if (!errors.isEmpty()) {
+                return next(ApiError.BadRequest('Некорректные входные данные', errors.array()));
+            }
+
+            const data = await adminService.filterInfoAdd(req.body, req.files["image"][0]);
+
+            return res.status(201).json(data);
+        } catch (e) {
+            next(e);
+        }
+    }
 }
 
 export default new AdminController();
