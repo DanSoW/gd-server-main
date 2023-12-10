@@ -39,7 +39,7 @@ if (config.get("doc.swagger2") === true) {
 }
 
 // Добавление в промежуточкое ПО раздачу статики из директории public
-app.use('/public', express.static('public'));
+app.use('/api/public', express.static('public'));
 // Добавление обработки запросов с JSON
 app.use(express.json({ extended: true }));
 // Добавление парсинка куки

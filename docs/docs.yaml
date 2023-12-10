@@ -8,7 +8,7 @@
       email: "swdaniel@yandex.ru"
   externalDocs: 
     description: "Ссылка на внешнюю документацию"
-    url: "http://localhost:5000/api-docs"
+    url: "http://localhost:5000/api/api-docs"
   paths: 
     /auth/sign-up: 
       post: 
@@ -164,9 +164,9 @@
       description: "Функции для авторизации пользователя"
   servers: 
     - 
-      url: "http://localhost:5000"
+      url: "http://localhost:5000/api"
     - 
-      url: "https://localhost:5000"
+      url: "https://localhost:5000/api"
   components: 
     securitySchemes: 
       JWT: 

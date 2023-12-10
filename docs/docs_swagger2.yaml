@@ -5,7 +5,7 @@
     version: "1.0.0"
     contact: 
       email: "swdaniel@yandex.ru"
-  host: "localhost:5000"
+  host: "localhost:5000/api"
   basePath: "/"
   produces: 
     - "application/json"
@@ -21,7 +21,7 @@
       description: ""
   externalDocs: 
     description: "Ссылка на внешнюю документацию"
-    url: "http://localhost:5000/api-docs"
+    url: "http://localhost:5000/api/api-docs"
   swagger: "2.0"
   paths: 
     /auth/sign-up: 

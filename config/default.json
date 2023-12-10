@@ -22,7 +22,7 @@
   "url": {
     "client": "http://localhost:3000",
     "management": "http://localhost:3001",
-    "api": "http://localhost:5000"
+    "api": "http://localhost:5000/api"
   },
   "cookie": {
     "domain": "localhost",
